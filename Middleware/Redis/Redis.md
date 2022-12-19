@@ -1,3 +1,11 @@
+- [Redis](#redis)
+  - [一. Redis数据类型](#一-redis数据类型)
+    - [1.String](#1string)
+    - [2.List](#2list)
+    - [3.Hash](#3hash)
+    - [4.Set](#4set)
+    - [5.ZSet](#5zset)
+
 # Redis
 ## 一. Redis数据类型
 ### 1.String
@@ -7,6 +15,7 @@
   - 如图所示，内部为当前字符串实际分配的空间capacity一般要高于实际字符串长度len。当字符串长度小于1M时，扩容都是加倍现有的空间，如果超过1M，扩容时一次会多扩容1M的空间。
 
 ### 2.List
+
 ### 3.Hash
 ### 4.Set
 ### 5.ZSet
