@@ -2,8 +2,8 @@
 
 # 技术手册
 - ## Java基础
-  - ### [JVM](./JavaBasics/JVM/JVMBasics.md)
-  - ### Java内存模型
+  - ### [JVM](./JavaBasics/JVM/JVM%E7%BB%84%E6%88%90.md)
+  - ### JMM
   - ### 集合
   - ### 并发
     - #### 线程
