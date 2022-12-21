@@ -1,8 +1,7 @@
-[toc]
 
 # 技术手册
 - ## Java基础
-  - ### [JVM](./JavaBasics/JVM/JVM%E7%BB%84%E6%88%90.md)
+  - ### [JVM](./JavaBasics/JVM/JVM.md)
   - ### JMM
   - ### 集合
   - ### 并发
@@ -11,24 +10,22 @@
     - #### 线程池
     - #### 锁
   - ### 异常
-
+- ## 设计
+  - ### [设计模式](./Design/DDD/../DesignPattern/DesignPattern.md)
+  - ### [DDD](./Design/DDD/DDD.md)
 
 ---
 - ## 微服务
+ - ### Dubbo
 
 ---
 - ## RDBMS
-
 
 - ## 中间件
   - ### Web容器
   - ### Nginx
   - ### MQ
-  - ### Redis
-    - ### 数据类型
-      - String
-        - 用途
-        - 数据结构
+  - ### [Redis](./DataBase/Redis/Redis.md)
 
-## 源码研读
-- ### Netty
+## 重要组件
+- ### [Netty](./Component/Netty/Netty.md)
