@@ -1,3 +1,12 @@
+
+- [Netty](#netty)
+  - [Linux IO模型](#linux-io模型)
+  - [Reactor编程模型](#reactor编程模型)
+  - [NIO编程模型](#nio编程模型)
+  - [Netty Java使用代码](#netty-java使用代码)
+  - [参考资料](#参考资料)
+
+
 # Netty
 
 ## Linux IO模型
@@ -20,6 +29,61 @@ ET模式在很大程度上减少了epoll事件被重复触发的次数，因此�
 
 ## NIO编程模型
   ![image](../../Resources/Component/Netty/nio-mode.png)  
+
+
+## Netty Java使用代码
+  ```java
+  public class NettyServer {
+
+    public static void main(String[] args) {
+       EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+       EventLoopGroup workGroup = new NioEventLoopGroup(10);
+       //创建服务器的启动对象
+        ServerBootstrap bootstrap = new ServerBootstrap();
+        //使用链式编程来配置启动参数
+        bootstrap.group(bossGroup,workGroup)
+                //使用NioServerSocketChannel作为服务器的通道实现
+                .channel(NioServerSocketChannel.class)
+                .option(ChannelOption.SO_BACKLOG, 1024)
+                .childHandler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        ChannelPipeline pipeline = socketChannel.pipeline();
+                        pipeline.addLast(new NettyServerHandler());
+                    }
+                });
+        System.out.println("Netty Server start...");
+        //绑定一个端口并且同步，生成一个ChannelFuture异步对象，通过isDone()等方法
+        //可以判断异步事件的执行情况
+        try {
+            ChannelFuture cf = bootstrap.bind(9000).sync();
+        } catch (InterruptedException e) {
+
+        }
+    }
+  }
+  ```
+   
+  ```java
+  public class NettyServerHandler extends ChannelInboundHandlerAdapter {
+
+    /**
+     * 当客户端连接服务器完成就会触发该方法
+     *
+     * @param ctx
+     */
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+        System.out.println("客户端连接通道建立完成" + ctx.pipeline().channel().getClass());
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        ByteBuf buf = (ByteBuf) msg;
+        System.out.println("收到客户端数据" + buf.toString(CharsetUtil.UTF_8));
+    }
+ }
+  ```
 
 ## 参考资料
 - [B站:Netty教程](https://www.bilibili.com/video/BV1JB4y1R7XB)

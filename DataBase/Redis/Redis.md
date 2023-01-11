@@ -25,7 +25,11 @@
       - [2.quicklist](#2quicklist)
       - [3.skiplist](#3skiplist)
       - [4.hashtable](#4hashtable)
-  - [三、参考资料](#三参考资料)
+  - [三、Redis数据清理机制](#三redis数据清理机制)
+  - [四、缓存典型问题](#四缓存典型问题)
+  - [五、Reids持久化策略](#五reids持久化策略)
+  - [六、Redis内存淘汰策略](#六redis内存淘汰策略)
+  - [七、参考资料](#七参考资料)
 
 # Redis
 ## 一. Redis数据类型
@@ -175,11 +179,54 @@
   - hashtable与java的HashMap类似，都是数组+链表的结构，通过链表或rehash来解决hash冲突问题
   ![image](../../Resources/DataBase/Redis/redis-hashtable-structure.png)
   - dictht[]数组长度为2, 一般我们使用dictht[0], 另外一个dictht[1]作为rehash使用
+
+## 三、Redis数据清理机制
+  - 定时删除
+  - 惰性删除
+  - 内存淘汰
+
+## 四、缓存典型问题
+   - 缓存穿透: 特定的缓存key未命中，每次都会查库。
+     - 解决方案：缓存不存在的key；布隆过滤器
+   - 缓存击穿: 单一热点缓存突然过期，大量的相关查询请求跑到数据库。
+     - 解决方案: 不过期；互斥锁；
+   - 缓存雪崩: 大量的key突然过期，大量的查询请求跑到数据库。
+     - 解决方案：不过期；随机过期时间;搭建高可用集群
+   - 数据一致性(redis与DB)
+     - 解决方案：延迟双删机制
+
+## 五、Reids持久化策略
+   - RDB
+   - AOF
+
+## 六、Redis内存淘汰策略
+  - 8种策略
+    - **noeviction(默认)**：当内存使用达到阈值的时候，所有引起申请内存的命令会报错。
+    - **allkeys-lru**：在主键空间中，优先移除最近未使用的key。(推荐)
+    - **volatile-lru**：在设置了过期时间的键空间中，优先移除最近未使用的key。
+    - **allkeys-random**：在主键空间中，随机移除某个key。
+    - **volatile-random**：在设置了过期时间的键空间中，随机移除某个key。
+    - **volatile-ttl**：在设置了过期时间的键空间中，具有更早过期时间的key优先移除。
+    - **volatile-lfu**，针对设置了过期时间的key，使用lfu算法进行淘汰。
+    - **allkeys-lfu**，针对所有key使用lfu算法进行淘汰。
+  - 主要使用了四种算法
+    - lru 最近很少的使用(也可以理解成最久没有使用)的key（根据时间，最不常用的淘汰）,Redis使用的LRU算法其实是一种不可靠的LRU算法, 是从采样maxmemory-samples个，然后进行淘汰。
+    - lfu 最近很少的使用的key (根据计数器，用的次数最少的key淘汰),它很好的解决了LRU算法的缺陷：一个很久没有被访问的key，偶尔被访问一次，导致被误认为是热点数据的问题
+    - random 随机淘汰
+    - ttl 快要过期的先淘汰 
+- 如在redis.conf中配置 `maxmemory-policy allkeys-lru`
+
   
-## 三、参考资料
+## 七、参考资料
+  - [B站：趣话Redis](https://www.bilibili.com/video/BV1ge411L7Sh/)
   - [Redis全套学习笔记.pdf](https://www.aliyundrive.com/s/XLLvcQA7uhA)
   - [CSDN:Redis Ziplist（压缩列表）](https://blog.csdn.net/solo_jm/article/details/118520888)
   - [CSDN:Redis中的ziplist](https://blog.csdn.net/xiexingshishu/article/details/110455212)
   - [Redis数据结构——快速列表(quicklist)](https://www.cnblogs.com/hunternet/p/12624691.html)
   - [Redis之字典(hashtable)](https://blog.csdn.net/m0_53804791/article/details/121344223)
   - [redis数据类型及使用场景](https://blog.csdn.net/weixin_42352733/article/details/123628841)
+  - [Redis内存淘汰策略](https://blog.csdn.net/qq_30999361/article/details/124488406)
+  - [redis淘汰策略](https://blog.csdn.net/weixin_40980639/article/details/125446002)
+  - [Redis缓存穿透/击穿/雪崩以及数据一致性的解决方案](https://www.toutiao.com/article/7186486324625605124/?log_from=4f224823dd997_1673241757062)
+  - [详解缓存穿透、缓存雪崩、缓存击穿](https://blog.csdn.net/qq_45637260/article/details/125866738)
+  

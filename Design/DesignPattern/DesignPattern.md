@@ -52,3 +52,9 @@
 ## 参考资料
   - [菜鸟：设计模式](https://www.runoob.com/design-pattern/design-pattern-intro.html)
   
+
+  - 待完善知识点
+    - hive
+    - hbase
+    - mysql 执行过程 log
+    - sentinel
