@@ -49,6 +49,28 @@
     - 模板模式(有多个子类共有的方法，且逻辑相同。)
     - 访问者模式(电脑配件)
 
+---
+## 设计模式举例
+### 单例模式
+   - [参考资料：菜鸟教程单例模式](https://www.runoob.com/design-pattern/singleton-pattern.html)
+   - 双检锁/双重校验锁（DCL，即 double-checked locking），这种方式采用双锁机制，安全且在多线程情况下能保持高性能。
+   ```java 
+   public class Singleton {  
+    private volatile static Singleton singleton;  
+    private Singleton (){}  
+    public static Singleton getSingleton() {  
+    if (singleton == null) {  
+        synchronized (Singleton.class) {  
+            if (singleton == null) {  
+                singleton = new Singleton();  
+            }  
+        }  
+    }  
+    return singleton;  
+    }  
+}
+   ```
+
 ## 参考资料
   - [菜鸟：设计模式](https://www.runoob.com/design-pattern/design-pattern-intro.html)
   

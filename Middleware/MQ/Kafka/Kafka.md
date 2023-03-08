@@ -9,6 +9,10 @@
  - **Partition**：为了实现扩展性，提高并发能力，一个Topic 以多个Partition的方式分布到多个Broker 上，每个partition 是一个有序的队列。一个Topic 的每个Partition都有若干个副本 (Replica），一个Leader 和若干个Follower。生产者发送数据的对象，以及消费者消费数据的对象，都是 Leader。 Follower负责实时从 Leader 中同步数据，保持和Leader 数据的同步。Leader 发生故障时，某个Follower 还会成为新的Leader。
   - **ISR**:如果一个follower落后leader不超过某个时间國值，那么则则ISR中，否则将放在OSR中。
 
+## 高可用性
+  - Kafka 一个最基本的架构认识：由多个 broker 组成，每个 broker 是一个节点；你创建一个topic，这个 topic 可以划分为多个 partition，每个 partition 可以存在于不同的 broker 上，每个partition 就放一部分数据。这就是天然的分布式消息队列，就是说一个 topic 的数据，是分散放在多个机器上的，每个机器就放一部分数据。
+  - Kafka 0.8 以后，提供了 HA 机制，就是 replica（复制品） 副本机制。每个 partition 的数据都会同步到其它机器上，形成自己的多个 replica 副本。所有 replica 会选举一个 leader 出来，那么生产和消费都跟这个 leader 打交道，然后其他 replica 就是 follower。写的时候，leader 会负责把数据同步到所有 follower 上去，读的时候就直接读 leader 上的数据即可。只能读写 leader？很简单，要是你可以随意读写每个 follower，那么就要 care 数据一致性的问题，系统复杂度太高，很容易出问题。Kafka 会均匀地将一个 partition 的所有 replica 分布在不同的机器上，这样才可以提高容错性。
+
 ## 高性能高吞吐原因
   - 1、磁盘顺序读写：保证了消息的堆积
     - •顺序读写，磁盘会预读，预读即在读取的起始地址连续读取多个页面，主要时间花费在了传输时间，而这个时间两种读写可以认为是一样的。
@@ -39,6 +43,10 @@
    - 手工提交offset
  - broker：减小刷盘间隔
  - 事务消息
+
+## 消息的顺序性
+ - 一个 topic，一个 partition，一个 consumer，内部单线程消费，单线程吞吐量太低，一般不会用这个。
+ - 写 N 个内存 queue，具有相同 key 的数据都到同一个内存 queue；然后对于 N 个线程，每个线程分别消费一个内存 queue 即可，这样就能保证顺序性。
 
 ## 事务
 

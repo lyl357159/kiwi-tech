@@ -1,6 +1,10 @@
 
 - [Netty](#netty)
   - [Linux IO模型](#linux-io模型)
+  - [I/O多路复用的三种方式](#io多路复用的三种方式)
+    - [select](#select)
+    - [poll](#poll)
+    - [epoll](#epoll)
   - [Reactor编程模型](#reactor编程模型)
   - [NIO编程模型](#nio编程模型)
   - [Netty Java使用代码](#netty-java使用代码)
@@ -10,6 +14,27 @@
 # Netty
 
 ## Linux IO模型
+  - 阻塞 I/O（blocking IO）
+  - 非阻塞 I/O（nonblocking IO）
+  - I/O 多路复用（ IO multiplexing）
+  - 信号驱动 I/O（ signal driven IO）
+  - 异步 I/O（asynchronous IO）
+
+## I/O多路复用的三种方式
+  ### select
+   - select有几个缺点：
+     - 监听的IO最大连接数有限，在Linux系统上一般为1024。
+     - select函数返回后，是通过遍历fdset ，找到就绪的描述符fd。（仅知道有I/O事件发生，却不知是哪几个流，所以遍历所有流）
+  
+  ### poll
+   - poll解决了连接数限制问题。但是呢，select和poll一样，还是需要通过遍历文件描述符来获取已经就绪的socket。如果同时连接的大量客户端，在一时刻可能只有极少处于就绪状态，伴随着监视的描述符数量的增长，效率也会线性下降。
+  
+  ### epoll
+   - epoll先通过epoll_ctl() 来注册一个fd（文件描述符），一旦基于某个fd就绪时，内核会采用回调机制，迅速激活这个fd，当进程调用epoll_wait() 时便得到通知。这里去掉了遍历文件描述符的操作，而是采用监听事件回调的机制。这就是epoll的亮点。
+
+  - fd数据拷贝每次调用select，需要将fd数据从用户空间拷贝到内核空间每次调用poll，需要将fd数据从用户空间拷贝到内核空间使用内存映射(mmap)，不需要从用户空间频繁拷贝fd数据到内核空间
+
+  - epoll明显优化了IO的执行效率，但在进程调用epoll_wait()时，仍然可能被阻塞。属于同步IO，需要在读写事件准备就绪后，由系统调用进行阻塞式读写，能不能酱紫：不用我老是去问你数据是否准备就绪，等我发出请求后，你数据准备好了通知我就行了，这就诞生了信号驱动IO模型。  
   - epoll的三个函数
     - epoll_create 新建epoll描述符
     ```c
@@ -88,3 +113,7 @@ ET模式在很大程度上减少了epoll事件被重复触发的次数，因此�
 ## 参考资料
 - [B站:Netty教程](https://www.bilibili.com/video/BV1JB4y1R7XB)
 - [epoll中et和lt的区别与实现原理](https://baijiahao.baidu.com/s?id=1736123311976351393&wfr=spider&for=pc)
+- [Linux IO模式及select、poll、epoll详解](https://blog.csdn.net/m0_46761060/article/details/124417722)
+
+---
+- [返回首页](../../README.md)

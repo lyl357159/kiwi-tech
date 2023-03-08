@@ -26,14 +26,17 @@
       - [3.skiplist](#3skiplist)
       - [4.hashtable](#4hashtable)
   - [三、Redis数据清理机制](#三redis数据清理机制)
-  - [四、缓存典型问题](#四缓存典型问题)
-  - [五、Reids持久化策略](#五reids持久化策略)
-  - [六、Redis内存淘汰策略](#六redis内存淘汰策略)
-  - [七、参考资料](#七参考资料)
+  - [四、Redis内存淘汰策略](#四redis内存淘汰策略)
+  - [五、缓存典型问题](#五缓存典型问题)
+  - [六、Reids持久化策略](#六reids持久化策略)
+  - [七、slave-\>master 选举算法](#七slave-master-选举算法)
+  - [Redis的部署模式](#redis的部署模式)
+  - [八、其它问题](#八其它问题)
+  - [九、参考资料](#九参考资料)
 
 # Redis
 ## 一. Redis数据类型
-
+---
 ### 1.String
 #### 简介
   - 一个Redis中字符串value最多可以是512M
@@ -42,7 +45,7 @@
   - 计数
   - 共享Session
   - 分布式锁
-  - [分布式系统全局序列号](分布式架构系统生成全局唯一序列号的一个思路)
+  - 分布式系统全局序列号(分布式架构系统生成全局唯一序列号的一个思路)
 #### 数据结构
   - String的数据结构为简单动态字符串（Simple Dynamic String，缩写SDS）。是可以修改的字符串，内部结构上类似于Java的ArrayList，采用分配冗余空间的方式来减少内存的频繁分配。
   ![image](../../Resources/DataBase/Redis/redis-string-structure.png)
@@ -67,7 +70,7 @@
 #### 数据结构
   - List的数据结构为快速链表[quickList](#2quicklist)
   - 首先在列表元素较少的情况下会使用一块连续的内存存储，这个结构是[ziplist](#1ziplist)(v7.0 由 listpack 替代)，也就是压缩列表。它将所有的元素紧挨着一起存储，分配的是一块连续的内存。
-  - 当就比较多的时候才会改成quickList。
+  - 当元素比较多的时候才会改成quickList。
   - 因为普通的链表需要的附加指针空间太大，会比较浪费空间，比如这个列表里存储的只是int类型的数，结构上还需要2个额外的指针prev和next。
   ![image](../../Resources/DataBase/Redis/redis-list-structure.png)
   - redis将链表和ziplist结合起来组成了quicklist。也就是将多个ziplist使用双向指针串起来使用，这样既满足了快速的插入删除性能，又不会出现太大的空间冗余。
@@ -116,7 +119,7 @@
     - 类似于java中的Map<String,score>，key为集合中的元素，value为元素对应的score，可以用来快速定位元素定义的score，时间复杂度为O(1)
   - 2、**[跳表](#3skiplist)**
     - 跳表（skiplist）是一个非常优秀的数据结构，实现简单，插入、删除、查找的复杂度均为O(logN)。类似java中的ConcurrentSkipListSet，根据score的值排序后生成的一个跳表，可以快速按照位置的顺序或者score的顺序查询元素。
-
+---
 ## 二、Redis内部数据类型
 #### 1.zipList
   - 简述
@@ -179,27 +182,17 @@
   - hashtable与java的HashMap类似，都是数组+链表的结构，通过链表或rehash来解决hash冲突问题
   ![image](../../Resources/DataBase/Redis/redis-hashtable-structure.png)
   - dictht[]数组长度为2, 一般我们使用dictht[0], 另外一个dictht[1]作为rehash使用
-
+---
 ## 三、Redis数据清理机制
   - 定时删除
+    - 指的是 Redis 默认是每隔 100ms 就随机抽取一些设置了过期时间的 key，检查其是否过期，如果过期就删除。
+    - 假设 Redis 里放了 10w 个 key，都设置了过期时间，你每隔几百毫秒，就检查 10w 个 key，那 Redis 基本上就死了，cpu 负载会很高的，消耗在你的检查过期 key 上了。注意，这里可不是每隔 100ms 就遍历所有的设置过期时间的 key，那样就是一场性能上的灾难。实际上 Redis 是每隔 100ms 随机抽取一些 key 来检查和删除的。
   - 惰性删除
+    - 定期删除可能会导致很多过期 key 到了时间并没有被删除掉，那咋整呢？所以就是惰性删除了。这就是说，在你获取某个 key 的时候，Redis 会检查一下 ，这个 key 如果设置了过期时间那么是否过期了？如果过期了此时就会删除，不会给你返回任何东西。
   - 内存淘汰
 
-## 四、缓存典型问题
-   - 缓存穿透: 特定的缓存key未命中，每次都会查库。
-     - 解决方案：缓存不存在的key；布隆过滤器
-   - 缓存击穿: 单一热点缓存突然过期，大量的相关查询请求跑到数据库。
-     - 解决方案: 不过期；互斥锁；
-   - 缓存雪崩: 大量的key突然过期，大量的查询请求跑到数据库。
-     - 解决方案：不过期；随机过期时间;搭建高可用集群
-   - 数据一致性(redis与DB)
-     - 解决方案：延迟双删机制
-
-## 五、Reids持久化策略
-   - RDB
-   - AOF
-
-## 六、Redis内存淘汰策略
+---
+## 四、Redis内存淘汰策略
   - 8种策略
     - **noeviction(默认)**：当内存使用达到阈值的时候，所有引起申请内存的命令会报错。
     - **allkeys-lru**：在主键空间中，优先移除最近未使用的key。(推荐)
@@ -216,8 +209,78 @@
     - ttl 快要过期的先淘汰 
 - 如在redis.conf中配置 `maxmemory-policy allkeys-lru`
 
+
+---
+## 五、缓存典型问题
+   - 缓存穿透: 特定的缓存key未命中，每次都会查库。
+     - 解决方案：缓存不存在的key；布隆过滤器
+   - 缓存击穿: 单一热点缓存突然过期，大量的相关查询请求跑到数据库。
+     - 解决方案: 不过期；互斥锁；
+   - 缓存雪崩: 大量的key突然过期，大量的查询请求跑到数据库。
+     - 解决方案：不过期；随机过期时间;搭建高可用集群
+   - 数据一致性(redis与DB)
+     - 解决方案：延迟双删机制
+   - 缓存并发竞争: 同时有多个客户端去set一个key。
+     - 解决方案
+       - 乐观锁，注意不要在分片集群中使用
+       - 分布式锁，适合分布式系统环境
+       - 时间戳，适合有序场景
+       - 消息队列，串行化处理
+
+---
+## 六、Reids持久化策略
+   - RDB
+     - RDB 会生成多个数据文件，每个数据文件都代表了某一个时刻中 Redis 的数据，这种多个数据文件的方式，非常适合做冷备，可以将这种完整的数据文件发送到一些远程的安全存储上去，比如说 Amazon 的 S3 云服务上去，在国内可以是阿里云的 ODPS 分布式存储上，以预定好的备份策略来定期备份 Redis 中的数据。
+     - RDB 对 Redis 对外提供的读写服务，影响非常小，可以让 Redis 保持高性能，因为 Redis 主进程只需要 fork 一个子进程，让子进程执行磁盘 IO 操作来进行 RDB 持久化即可。
+     - 相对于 AOF 持久化机制来说，直接基于 RDB 数据文件来重启和恢复 Redis 进程，更加快速。
+     - 如果想要在 Redis 故障时，尽可能少的丢失数据，那么 RDB 没有 AOF 好。一般来说，RDB 数据快照文件，都是每隔 5 分钟，或者更长时间生成一次，这个时候就得接受一旦 Redis 进程宕机，那么会丢失最近 5 分钟（甚至更长时间）的数据。
+     - RDB 每次在 fork 子进程来执行 RDB 快照数据文件生成的时候，如果数据文件特别大，可能会导致对客户端提供的服务暂停数毫秒，或者甚至数秒。
+   - AOF
+     - AOF 可以更好的保护数据不丢失，一般 AOF 会每隔 1 秒，通过一个后台线程执行一次 fsync 操作，最多丢失 1 秒钟的数据。
+     - AOF 日志文件以 append-only 模式写入，所以没有任何磁盘寻址的开销，写入性能非常高，而且文件不容易破损，即使文件尾部破损，也很容易修复。
+     - AOF 日志文件即使过大的时候，出现后台重写操作，也不会影响客户端的读写。因为在 rewrite log 的时候，会对其中的指令进行压缩，创建出一份需要恢复数据的最小日志出来。在创建新日志文件的时候，老的日志文件还是照常写入。当新的 merge 后的日志文件 ready 的时候，再交换新老日志文件即可。
+     - AOF 日志文件的命令通过可读较强的方式进行记录，这个特性非常适合做灾难性的误删除的紧急恢复。比如某人不小心用 flushall 命令清空了所有数据，只要这个时候后台 rewrite 还没有发生，那么就可以立即拷贝 AOF 文件，将最后一条 flushall 命令给删了，然后再将该 AOF 文件放回去，就可以通过恢复机制，自动恢复所有数据。
+     - 对于同一份数据来说，AOF 日志文件通常比 RDB 数据快照文件更大。
+     - AOF 开启后，支持的写 QPS 会比 RDB 支持的写 QPS 低，因为 AOF 一般会配置成每秒 fsync 一次日志文件，当然，每秒一次 fsync ，性能也还是很高的。（如果实时写入，那么 QPS 会大降，Redis 性能会大大降低）
+     - 以前 AOF 发生过 bug，就是通过 AOF 记录的日志，进行数据恢复的时候，没有恢复一模一样的数据出来。所以说，类似 AOF 这种较为复杂的基于命令日志 merge 回放的方式，比基于 RDB 每次持久化一份完整的数据快照文件的方式，更加脆弱一些，容易有 bug。不过 AOF 就是为了避免 rewrite 过程导致的 bug，因此每次 rewrite 并不是基于旧的指令日志进行 merge 的，而是基于当时内存中的数据进行指令的重新构建，这样健壮性会好很多。
+
+
+---
+## 七、slave->master 选举算法
+  - 如果一个 master 被认为 odown 了，而且 majority 数量的哨兵都允许主备切换，那么某个哨兵就会执行主备切换操作，此时首先要选举一个 slave 来，会考虑 slave 的一些信息：
+    - 跟 master 断开连接的时长
+    - slave 优先级
+    - 复制 offset
+    - run id
+  - 如果一个 slave 跟 master 断开连接的时间已经超过了 down-after-milliseconds 的 10 倍，外加 master 宕机的时长，那么 slave 就被认为不适合选举为 master。
+   `(down-after-milliseconds * 10) + milliseconds_since_master_is_in_SDOWN_state`
+   接下来会对 slave 进行排序：
+     - 按照 slave 优先级进行排序，slave priority 越低，优先级就越高。
+     - 如果 slave priority 相同，那么看 replica offset，哪个 slave 复制了越多的数据，offset 越靠后，优先级就越高。
+     - 如果上面两个条件都相同，那么选择一个 run id 比较小的那个 slave。
+
+## Redis的部署模式
+  - 主从模式
+   ![image](../../Resources/DataBase/Redis/redis_master_slave.png)
+  >
+  - 哨兵模式
+   ![image](../../Resources/DataBase/Redis/redis_sentinel.png)
+  >
+  - 集群模式
+  ![image](../../Resources/DataBase/Redis/redis_cluster.png)
   
-## 七、参考资料
+
+---
+## 八、其它问题
+  - [为什么Redis集群有16384个槽](https://www.cnblogs.com/rjzheng/p/11430592.html)
+  - Redis为什么快
+    - 数据结构简单高效
+    - 单线程模型
+    - 高效的持久化机制(异步的)
+    - 高效的网络模型(epoll 或 kqueue 等)
+
+---
+## 九、参考资料
   - [B站：趣话Redis](https://www.bilibili.com/video/BV1ge411L7Sh/)
   - [Redis全套学习笔记.pdf](https://www.aliyundrive.com/s/XLLvcQA7uhA)
   - [CSDN:Redis Ziplist（压缩列表）](https://blog.csdn.net/solo_jm/article/details/118520888)
@@ -230,3 +293,6 @@
   - [Redis缓存穿透/击穿/雪崩以及数据一致性的解决方案](https://www.toutiao.com/article/7186486324625605124/?log_from=4f224823dd997_1673241757062)
   - [详解缓存穿透、缓存雪崩、缓存击穿](https://blog.csdn.net/qq_45637260/article/details/125866738)
   
+--- 
+
+- [回到首页](../../README.md)

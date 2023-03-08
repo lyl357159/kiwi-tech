@@ -23,6 +23,9 @@
  - **来源访问控制规则**
  - **热点参数规则**
 
+## Sentinel与Hystrix对比
+- Hystrix 和 Sentinel 的实时指标数据统计实现都是基于**滑动窗口**的
+
 ## 参考资料
  - [Sentinel 原理-全解析](https://blog.csdn.net/lichao920926/article/details/105295988/)
  - [Sentinel五大规则详解](https://blog.csdn.net/weixin_44780078/article/details/128242453)
