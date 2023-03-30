@@ -26,6 +26,13 @@
   # lora插件
   https://github.com/kohya-ss/sd-webui-additional-networks
 
+ 启动
+ ```shell
+ cd /Users/liulu/tool/AI/stable-diffusion-webui
+ ./webui.sh --share
+ ```
+
+
 ---
 ## 参考资料
  - [github-stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Installation-on-Apple-Silicon)

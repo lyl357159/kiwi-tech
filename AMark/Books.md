@@ -8,6 +8,7 @@
   - [JavaGuide(Java面试+学习指南)](https://javaguide.cn/home.html)
   - [java菜市场](https://www.javaweb.shop/article/category/3.html)
   - [廖雪峰的Java教程](https://www.liaoxuefeng.com/wiki/1252599548343744)
+  - [美团技术团队](https://tech.meituan.com/archives)
   - [Java 工程师进阶知识完全扫盲](https://doocs.github.io/advanced-java/#/)
   - [腾讯云开发者社区-Java建设者](https://cloud.tencent.com/developer/column/77412)
   - [JavaScript 概述](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Language_Overview)

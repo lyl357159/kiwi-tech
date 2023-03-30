@@ -29,6 +29,7 @@
   - ### 一致性算法(共识算法)
     - #### [Paxos](./Algorithm/Consensus/Paxos/Paxos.md)
     - #### [Raft](./Algorithm/Consensus/Raft/Raft.md)
+    - #### [Zab](./Algorithm/Consensus/ZAB/ZAB.md)
   - ### [一致性Hash算法](./Algorithm/ConsistentHashing/ConsistentHashing.md)
   - ### [时间轮算法](./Algorithm/TimingWheel/TimingWheel.md)
   - ### [LeetCode](./Algorithm/LeetCode/LeetCode.md)
@@ -97,14 +98,3 @@
 
 
 ps:右键->命令面板(cmd + shit + p)->Markdown all in one:创建目录
-
-
-- HanLP
-- ChatGPT
-
-
-- 英文简历
-  - I graduated from Huazhong University of Science and Technology in 2010
-  - Sharding-jdbc
-
-以表格的形式总结Java常见集合的底层数据结构、初始容量、扩容机制、负载因子、是否有序、是否线程安全等参数

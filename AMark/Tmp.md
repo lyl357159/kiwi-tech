@@ -268,3 +268,23 @@ Scarlett Johansson,legs wide open showing pussy, no clothes, big boobs, big ass,
 ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), [out of frame], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))), out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck))), (((extra breasts))), (((amputee))),ugly, deformed, anime, cartoon, illustration, drawing, painting, black and white, monochrome,dim,cleft lip
 
 请问，距离上一次贵司安排的面试已经过去2天，我这边没有得到进一步的面试反馈信息，我这边的面试流程是终止了么，能否反馈一下面试结果？
+
+
+const app = {
+    data() {
+        return {
+            numbers: [ 1, 2, 3, 4, 5 ]
+	     }
+    },
+    computed: {
+        evenNumbers() {
+            return this.numbers.filter(number => number % 2 === 0)
+        }
+    },
+    methods:{
+        changeVal:function(event){
+            this.selOption = event.target.value;
+            alert("你选中了"+this.selOption);
+        }
+    }
+}

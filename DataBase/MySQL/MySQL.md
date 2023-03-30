@@ -1,8 +1,7 @@
 # MySQL
 
 ## MySQL执行过程
-
-
+ ![image](../../Resources/DataBase/MySQL/mysql_execute_flow.png)
 
 ## MySQL日志
 
@@ -54,6 +53,39 @@
 ## MySQL8.0优化
   - Mysql分为Server层和存储引擎层两大部分，那么Qcache位于Server层，Buffer Pool位于存储引擎层，mysql8.0移除了Qcache
 
+## MySQL调优
+  - 优化查询语句：
+    - 使用索引。
+    - 使用 EXPLAIN 分析查询执行计划，找出潜在的性能问题。
+    - 避免使用子查询，改用 JOIN。
+    - 避免使用 SELECT *，仅查询需要的列。
+    - 使用 LIMIT 限制返回结果数量。
+    - 避免在 WHERE 子句中使用函数和表达式。
+  - 调整MySQL的配置参数
+    - 调整 InnoDB 配置，如 innodb_buffer_pool_size、innodb_log_file_size、innodb_flush_log_at_trx_commit 等。
+    - 调整查询缓存设置，如 query_cache_size、query_cache_type 等。
+    - 调整连接和线程设置，如 max_connections、thread_cache_size 等。
+    - 根据实际需求调整各种超时参数，如 wait_timeout、interactive_timeout 等。
+  - 数据库设计优化
+    - 合理设计表结构，使用合适的数据类型和字符集。
+    - 创建合适的索引，以提高查询性能。
+    - 对于大表，可以考虑分区和分表。
+    - 尽量使用较小的数据类型,避免过多的NULL值等。
+    - 避免使用大字段、避免使用TEXT和BLOB类型等。
+  - 分离读写操作
+    - 将读写操作分离到不同的服务器上，减轻单个服务器的压力。
+  -  定期清理无用数据
+    - 例如删除过期的日志、清理无用的临时表等。
+  - 监控和分析：
+    - 使用慢查询日志分析慢查询。
+    - 监控 MySQL 的性能指标，如吞吐量、响应时间、锁等。
+    - 使用工具如 MySQLTuner、Percona Monitoring and Management (PMM) 进行性能分析。
+  - 硬件和系统优化：
+    - 选择合适的硬件配置，如 CPU、内存、磁盘和网络。
+    - 优化操作系统设置，如 I/O 调度、文件系统、虚拟内存和网络参数。
+  - 使用缓存
+    - 例如使用Memcached或Redis缓存，减轻数据库的压力。
+
 
 ## 问题
    - 在 MySQL 中，普通索引和唯一索引的存储方式有所不同
@@ -84,6 +116,7 @@
 ## 参考资料
   - [MySQL中的几种日志了解](https://www.cnblogs.com/myseries/p/10728533.html)
   - [Java 工程师进阶知识完全扫盲](https://doocs.github.io/advanced-java/#/)
+  - [mysql执行过程以及顺序](https://www.cnblogs.com/wyq178/p/11576065.html)
 
 
 

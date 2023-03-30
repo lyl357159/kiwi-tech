@@ -7,6 +7,8 @@
     - [反转链表](#反转链表)
     - [两数之和](#两数之和)
     - [两数相加](#两数相加)
+    - [使用两个队列实现栈](#使用两个队列实现栈)
+    - [使用两个栈实现队列](#使用两个栈实现队列)
 
 # LeetCode
 
@@ -184,7 +186,84 @@ class Solution {
 }
 ```
 
+---
+### 使用两个队列实现栈
+```java
+import java.util.*;
 
+public class QueueStack {
+    Queue<Integer> q1 = new LinkedList<Integer>();
+    Queue<Integer> q2 = new LinkedList<Integer>();
+    
+    // Push element x onto stack.
+    public void push(int x) {
+        q1.offer(x);
+        while (q1.size() > 1) {
+            q2.offer(q1.poll());
+        }
+    }
+
+    // Removes the element on top of the stack.
+    public int pop() {
+        int pop = q1.poll();
+        if (q1.isEmpty()) {
+            q1 = q2;
+            q2 = new LinkedList<Integer>();
+        }
+        return pop;
+    }
+
+    // Get the top element.
+    public int top() {
+        return q1.peek();
+    }
+
+    // Return whether the stack is empty.
+    public boolean empty() {
+        return q1.isEmpty() && q2.isEmpty();
+    }
+}
+```
+---
+### 使用两个栈实现队列
+```java
+import java.util.*;
+
+public class StackQueue {
+    Stack<Integer> s1 = new Stack<Integer>();
+    Stack<Integer> s2 = new Stack<Integer>();
+    
+    // Push element x to the back of queue.
+    public void push(int x) {
+        s1.push(x);
+    }
+
+    // Removes the element from in front of queue.
+    public int pop() {
+        if (s2.isEmpty()) {
+            while (!s1.isEmpty()) {
+                s2.push(s1.pop());
+            }
+        }
+        return s2.pop();
+    }
+
+    // Get the front element.
+    public int peek() {
+        if (s2.isEmpty()) {
+            while (!s1.isEmpty()) {
+                s2.push(s1.pop());
+            }
+        }
+        return s2.peek();
+    }
+
+    // Return whether the queue is empty.
+    public boolean empty() {
+        return s1.isEmpty() && s2.isEmpty();
+    }
+}
+```
 
 ---
 - [回到首页](../../README.md)

@@ -14,6 +14,7 @@
 
 ## 大TODO
    - 职业规划
+   - 英语听说读写能力
 
 ## 小TODO
   - ~~简历优化，更多描述知识图谱平台~~
@@ -55,9 +56,25 @@
     - [什么是 Service Mesh](https://zhuanlan.zhihu.com/p/61901608)
     - [初识 Service Mesh](https://baijiahao.baidu.com/s?id=1709259327958538327&wfr=spider&for=pc)
   - 使用Vue + Element 模拟一个指定的页面，并加入到测试项目导航中
+  > 
+  - 大屏BI（JS+Echarts开发、FineReport、dataV制作），netty
+  - AWS IOT
+  - copilot
+  - TCP/IP协议，Http协议，分布式事务，大数据相关面试题, 防Ddos攻击
+  - 典型系统设计(微信、京东、淘宝、头条、抖音等)
+  - Lua、灰度发布、~~trie树~~
+  - Istio/Linkerd/Dapr, 手写红黑树、堆排序、规则引擎
+  - 两个队列实现栈，两个栈实现队列,Base62、推荐算法、 ~~A/B 测试~~
+  - LSM存储
+  - ~~mysql/redis调优~~
+  - TiDB/PostgreSQL/Cassandra/Click
+  - www.cursor.so 
+  - copilot x
+  - SpEL 表达式
 
 ## 一些新的知识
   - RAP Mock数据 
+  - [Gerrit](https://juejin.cn/post/7161732316371353607)
   - ApiPost  Apipost = Postman + Swagger + Mock + Jmeter
   - Akka Akka是JAVA虚拟机JVM平台上构建高并发、分布式和容错应用的工具包和运行时。Akka用Scala语言写成，同时提供了Scala和JAVA的开发接口。
   - Riak Riak 是以 Erlang 编写的一个高度可扩展的分布式数据存储
@@ -77,14 +94,14 @@
   - MAC应用下载: https://www.macbl.com/
   - 油小猴：https://www.youxiaohou.com/
   - ndm下载：http://neatdownloadmanager.com/index.php/en/
-  
-
-  int pre = 0; int ans = nums[0];
-         for (int i = 0; i < nums.length; i++) {
-              pre = Math.max(nums[i], pre + nums[i]);
-              ans = Math.max(pre, ans);
-         }
-         return ans;
 
 
-         强大的扩展程序BC是直角三角形但不
+- HanLP
+- ChatGPT
+
+
+- 英文简历
+  - I graduated from Huazhong University of Science and Technology in 2010
+  - Sharding-jdbc
+
+以表格的形式总结Java常见集合的底层数据结构、初始容量、扩容机制、负载因子、是否有序、是否线程安全等参数

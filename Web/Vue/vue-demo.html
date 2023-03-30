@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+<script src="https://cdn.staticfile.org/vue/3.0.5/vue.global.js"></script>
+<script src="https://unpkg.com/vue-router@4"></script>
+<style>
+    .class1{
+      background: #de5858;
+      color: #50159e;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <input v-focus>
+  
+  <p>原始字符串: {{ message }}</p>
+  <p>计算后反转字符串(计算属性): {{ reversedMessage }}</p>
+
+  <p>Count: {{ count }}</p>
+  <button @click = "increment" style = "font-size:25px;">点我让上面的Count加1</button>
+
+  <p>使用 v-html 指令(用于输出 html 代码): <span v-html="rawHtml"></span></p>
+
+  <lable>修改颜色</lable><input type="checkbox" v-model="use" id="r1">
+  <div v-bind:class="{'class1': use}"> v-bind:class 指令</div>
+  <runoob></runoob>
+  <button-counter></button-counter>
+
+  <p><button @click = "this.seen = !this.seen" style = "font-size:25px;">点击隐藏和解除隐藏</button></p>
+  <p v-if="seen">现在你看到我了</p>
+
+  <p><a v-bind:href="url">菜鸟教程</a></p>
+
+  <p><input v-model="message"></p>
+
+  <ul>
+    <li v-for="(value, key, index) in contents">
+     {{ index }}. {{ key }} : {{ value }}
+    </li>
+  </ul>
+
+  <form v-on:submit.prevent="addNewTodo">
+    <label for="new-todo">添加 todo</label>
+    <input
+      v-model="newTodoText"
+      id="new-todo"
+      placeholder="例如：明天早上跑步"
+    />
+    <button>添加</button>
+  </form>
+  
+  <ul>
+    <todo-item
+      v-for="(todo, index) in todos"
+      :key="todo.id"
+      :title="todo.title"
+      @remove="todos.splice(index, 1)"
+    ></todo-item>
+  </ul>
+
+  <runoob-a></runoob-a>
+
+  <p>
+    <!--使用 router-link 组件进行导航 -->
+    <!--通过传递 `to` 来指定链接 -->
+    <!--`<router-link>` 将呈现一个带有正确 `href` 属性的 `<a>` 标签-->
+    <router-link to="/">Go to Home</router-link>&nbsp;
+    <router-link to="/about">Go to About</router-link>
+  </p>
+  <!-- 路由出口 -->
+  <!-- 路由匹配到的组件将渲染在这里 -->
+  <router-view></router-view>
+
+</div>
+    
+
+<script>
+
+//局部组件
+var runoobA = {
+  template: '<h1>自定义局部组件!</h1>'
+}
+
+const app = {
+  data() {
+    return {
+      message: 'RUNOOB!!',
+      count: 3,
+      rawHtml: '<span style="color: red">这里会显示红色！</span>',
+      use: false,
+      seen: true,
+      url: 'https://www.runoob.com',
+      contents: {
+        name: '菜鸟教程',
+        url: 'http://www.runoob.com',
+        slogan: '学的不仅是技术，更是梦想！'
+      },
+      newTodoText: '',
+      todos: [
+        {
+          id: 1,
+          title: '看电影'
+        },
+        {
+          id: 2,
+          title: '吃饭'
+        },
+        {
+          id: 3,
+          title: '上 RUNOOB 学习'
+        }
+      ],
+      nextTodoId: 4
+    }
+  },
+  methods: {
+    increment() {
+      // `this` 指向该组件实例
+      this.count++
+    },
+    addNewTodo() {
+      this.todos.push({
+        id: this.nextTodoId++,
+        title: this.newTodoText
+      })
+      this.newTodoText = ''
+    },
+    two(event) {
+      alert("第二个事件处理器逻辑..." + event.target.name)
+    }
+  },
+  watch : {
+    count : function(nval, oval) {
+     alert('计数器值的变化 :' + oval + ' 变为 ' + nval + '!');
+    }
+  },
+  computed: {
+    // 计算属性的 getter
+    reversedMessage: function () {
+      // `this` 指向 vm 实例
+      return this.message.split('').reverse().join('')
+    }
+  },
+  components: {
+    'runoob-a': runoobA
+  },
+  directives: {
+      focus: {
+         // 指令的定义
+         mounted(el) {
+            el.focus()
+         }
+      }
+   }
+}
+
+// 1. 定义路由组件.
+// 也可以从其他文件导入
+const Home = { template: '<div>Home</div>' }
+const About = { template: '<div>About</div>' }
+
+// 2. 定义一些路由
+// 每个路由都需要映射到一个组件。
+// 我们后面再讨论嵌套路由。
+const routes = [
+  { path: '/', component: Home },
+  { path: '/about', component: About },
+]
+
+// 3. 创建路由实例并传递 `routes` 配置
+// 你可以在这里输入更多的配置，但我们在这里
+// 暂时保持简单
+const router = VueRouter.createRouter({
+  // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
+  history: VueRouter.createWebHashHistory(),
+  routes, // `routes: routes` 的缩写
+})
+ 
+
+const vueApp = Vue.createApp(app)
+
+vueApp.use(router)
+
+// 定义一个名为 runoob的新全局组件
+vueApp.component('runoob', {
+    template: '<h1>自定义组件!</h1>'
+})
+
+// 定义一个名为 button-counter 的新全局组件
+vueApp.component('button-counter', {
+  data() {
+    return {
+      count: 0
+    }
+  },
+  template: `
+    <button @click="count++">
+      点了 {{ count }} 次！
+    </button>`
+})
+
+vueApp.component('todo-item', {
+  template: `
+    <li>
+      {{ title }}
+      <button @click="$emit('remove')">删除</button>
+    </li>
+  `,
+  props: ['title'],
+  emits: ['remove']
+})
+
+vueApp.mount('#app')
+
+
+</script>
+
+</body>
+
+
+</html>
