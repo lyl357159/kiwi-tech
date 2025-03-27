@@ -1,0 +1,40 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr'
+
+### NetBeans ###
+nbproject/private/
+build/release
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+/config/
+
+### mac os .DS_Store file ###
+.DS_Store
+*.log
+logs/
+conf/
+
+### maven version backup
+*.versionsBackup
+
+
+### spring ###
+banner.txt
+/bootstrap.yml
+/.idea/
