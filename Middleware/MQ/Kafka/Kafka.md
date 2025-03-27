@@ -55,6 +55,7 @@
 
 ## 参考资料
   - [kafka是如何实现高性能高吞吐的？](https://blog.csdn.net/weixin_42103983/article/details/121796316)
+  - [03、如何理解Kafka和Zookeeper的关系 ](https://www.cnblogs.com/suyj/p/16786273.html)
 
 
   

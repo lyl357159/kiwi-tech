@@ -21,6 +21,7 @@
   - 异步 I/O（asynchronous IO）
 
 ## I/O多路复用的三种方式
+  > 注意：Java 编程中的 NIO（New IO）类库组件所归属的不是基础 IO 模型中的 NIO 模型，而是 IO 多路复用模型。
   ### select
    - select有几个缺点：
      - 监听的IO最大连接数有限，在Linux系统上一般为1024。
@@ -114,6 +115,6 @@ ET模式在很大程度上减少了epoll事件被重复触发的次数，因此�
 - [B站:Netty教程](https://www.bilibili.com/video/BV1JB4y1R7XB)
 - [epoll中et和lt的区别与实现原理](https://baijiahao.baidu.com/s?id=1736123311976351393&wfr=spider&for=pc)
 - [Linux IO模式及select、poll、epoll详解](https://blog.csdn.net/m0_46761060/article/details/124417722)
-
+- [Java四种主要的IO模型（详解版）](http://c.biancheng.net/view/9837.html)
 ---
 - [返回首页](../../README.md)

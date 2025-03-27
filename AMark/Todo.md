@@ -71,6 +71,10 @@
   - www.cursor.so 
   - copilot x
   - SpEL 表达式
+  - Photopea、OSGi
+  - 最大努力通知
+  - 边缘网关
+  - GIS
 
 ## 一些新的知识
   - RAP Mock数据 
@@ -81,6 +85,8 @@
   - Flutter [《Flutter实战·第二版》](https://book.flutterchina.club/)
   - Skia 2D绘图引擎
   - AOT （Ahead of time）即 “提前编译”.JIT（Just-in-time）即“即时编译”.
+  - InfluxDB，TimescaleDB，PostGIS
+  - P2P网络NAT穿透原理(打洞方案) https://blog.csdn.net/yangowen/article/details/125787199
 
 
 ## 待学习完善方向

@@ -1,5 +1,8 @@
 # RocketMQ
   ![image](../../Resources/../../Resources/Middleware/MQ/RocketMQ/rocketmq_architecture.png)
+![image](../../Resources/../../Resources/Middleware/MQ/RocketMQ/rocketmq_structure.webp)
+
+  
 
 ## RocketMQ如何保证消息不丢失
  - 持久化机制：RocketMQ 将消息持久化到磁盘上，确保即使发生宕机等异常情况，也能够在重启后继续传递未被消费的消息。RocketMQ 默认将消息存储到本地文件中，并支持多种存储方式，例如 RocksDB、MySQL 等。
@@ -9,6 +12,7 @@
 
 ## 参考资料
   - [架构篇 RocketMQ 的架构设计](https://juejin.cn/post/7067733864143142925)
+  - [RocketMQ的核心概念以及架构图](https://blog.51cto.com/u_12132623/3065800)
 ---
 
 - [返回首页](../../../README.md)

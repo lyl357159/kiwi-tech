@@ -14,3 +14,15 @@
 | TreeSet | 红黑树 | 无 | 不适用，每次添加都会重新排序 | 无 | 有序（自然排序或自定义排序）| 非线程安全 | 添加了默认方法 | 添加了默认方法 |
 | LinkedHashMap | 哈希表 + 双向链表 | 16 | 当元素数量达到容量的75%时，容量扩大为原来的2倍 | 0.75 | 有序（插入顺序或访问顺序）| 非线程安全 | 无变化 | 无变化 |
 | TreeMap | 红黑树 | 无 | 不适用，每次添加都会重新排序 | 无 | 有序（自然排序或自定义排序）| 非线程安全 | 添加了默认方法 | 添加了默认方法 |
+
+Java中的集合是一种可以存储多个元素的容器，常见的集合包括List、Set、Map等。每种集合都有自己的特点和用途，下面分别介绍一下Java中常见的集合及其特性：
+
+- List（列表）：List是一种有序的集合，可以存储重复的元素。常见的List实现类包括ArrayList、LinkedList、Vector等。其中，ArrayList是基于动态数组实现的，支持快速随机访问元素；LinkedList是基于双向链表实现的，支持快速插入和删除元素；Vector与ArrayList类似，但是是线程安全的，因此性能较差。List集合提供了丰富的操作方法，如添加元素、删除元素、修改元素、查找元素等。
+
+- Set（集合）：Set是一种不允许重复元素的集合，常见的Set实现类包括HashSet、TreeSet、LinkedHashSet等。其中，HashSet是基于哈希表实现的，支持快速查找元素；TreeSet是基于红黑树实现的，支持对元素进行排序；LinkedHashSet是基于哈希表和双向链表实现的，支持按照插入顺序访问元素。Set集合提供了丰富的操作方法，如添加元素、删除元素、查找元素等。
+
+- Map（映射）：Map是一种键值对形式的集合，常见的Map实现类包括HashMap、TreeMap、LinkedHashMap等。其中，HashMap是基于哈希表实现的，支持快速查找键值对；TreeMap是基于红黑树实现的，支持对键进行排序；LinkedHashMap是基于哈希表和双向链表实现的，支持按照插入顺序访问键值对。Map集合提供了丰富的操作方法，如添加键值对、删除键值对、查找键值对等。
+
+- Queue（队列）：Queue是一种先进先出（FIFO）的集合，常见的Queue实现类包括LinkedList、PriorityQueue等。其中，LinkedList既可当作List使用，也可当作Queue使用；PriorityQueue是基于堆实现的，支持按照优先级访问元素。Queue集合提供了丰富的操作方法，如添加元素、删除元素、查找元素等。
+
+- Stack（栈）：Stack是一种后进先出（LIFO）的集合，常见的Stack实现类只有一个，即java.util.Stack。Stack集合提供了丰富的操作方法，如添加元素、删除元素、查找元素等。

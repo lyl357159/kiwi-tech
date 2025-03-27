@@ -16,7 +16,7 @@
  |---|---|---|---|---|
  |公司/社区|	Rabbit|	Apache	|阿里	|Apache
  |开发语言 |Erlang	|Java	|Java	|Scala&Java
- |协议支持 |AMQP，XMPP，SMTP，STOMP	|OpenWire,STOMPREST,XMPP,AMQP|	自定义|	自定义协议，社区封装了http协议支持
+ |协议支持 |AMQP，XMPP，SMTP，STOMP	|OpenWire、AMQP、STOMP、MQTT、WS（WebSockets）和REST（Representational State Transfer,STOMPREST,XMPP|	自定义|	自定义协议，Kafka支持自己的消息协议，称为Kafka协议，同时也支持其他消息协议，如STOMP、AMQP和MQTT等。，社区封装了http协议支持
  |客户端支持语言|官方支持Erlang，Java，Ruby等,社区产出多种API，几乎支持所有语言|Java，C，C++，Python，PHP，Perl，.net等	|Java，C++（不成熟）|	官方支持Java,社区产出多种API，如PHP，Python等
  |单机吞吐量|万级(其次)|万级(最差)|十万级(最好)|十万级(次之)
  |消息延迟|微秒级|毫秒级|毫秒级|毫秒以内
